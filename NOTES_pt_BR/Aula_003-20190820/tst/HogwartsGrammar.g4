@@ -3,21 +3,24 @@ grammar HogwartsGrammar;
 ID: [a-z]+;
 WS: [ \t\r\n]+ -> skip;
 
-cmd_impedimenta: 'cmd_impedimentaTO_WRITE';
-variavel: 'variavelTO_WRITE';
-inteiro: 'inteiroTO_WRITE';
-real: 'realTO_WRITE';
+DEC_SEP: '.'; // decimal separator
+
+VARIAVEL: ID | ID [_]ID;
+INTEIRO: [0-9]+;
+REAL: [0-9]+ DEC_SEP [0-9]+; //
 
 programa:
 	'HOUSES' houses 'HOGWARTS' comandos 'Albus' 'Dumbledore';
 
 houses: house | house '@' houses;
 
-house:
-	'Gryffindor' alunos '$'
-	| 'Ravenclaw' alunos '$'
-	| 'Slytherin' alunos '$'
-	| 'Hufflepuff' alunos '$';
+HOUSE_NAME:
+	'Gryffindor'
+	| 'Ravenclaw'
+	| 'Slytherin'
+	| 'Hufflepuff';
+
+house: HOUSE_NAME alunos '$';
 
 alunos: aluno | aluno ',' alunos;
 
@@ -32,27 +35,26 @@ comando:
 	| cmd_homenum
 	| cmd_expelliarmus
 	| cmd_leviosa
-	| cmd_impedimenta; // break
+	| cmd_impedimenta;
 
-cmd_revelio:
-	'revelio' '(' expressao ')'; // print
+cmd_revelio: 'revelio' '(' expressao ')'; // print
 
 cmd_petrificus:
 	'petrificus' 'totalus' '(' condicao ')' '[' comandos ']'; // while
 
-cmd_protego: 'protego' variavel 'lumos' expressao; // atribuicao
+cmd_protego: 'protego' VARIAVEL 'lumos' expressao; // atribuicao
 
-cmd_homenum: 'homenum' 'revelio' '(' variavel ')'; // leitura
+cmd_homenum: 'homenum' 'revelio' '(' VARIAVEL ')'; // leitura
 
 cmd_expelliarmus:
-	'expelliarmus' variavel 'avada' 'kedavra' expressao // for
+	'expelliarmus' VARIAVEL 'avada' 'kedavra' expressao // for
 	'crucio' expressao '[' comandos ']';
 
-cmd_leviosa:
-	'wingardium' 'leviosa' '(' condicao ')' '[' comandos ']'
-	| 'wingardium' 'leviosa' '(' condicao ')' '[' comandos ']' else; // if
+cmd_impedimenta: 'break';
 
-else: 'alohomora' '[' comandos ']';
+cmd_leviosa:
+	'wingardium' 'leviosa' '(' condicao ')' '[' comandos ']' // if
+	| cmd_leviosa 'alohomora' '[' comandos ']'; // if else
 
 expressao:
 	expressao 'reparo' termo // +
@@ -66,7 +68,7 @@ termo:
 	| termo 'confundo' fator // %
 	| fator;
 
-fator: inteiro | real | '(' expressao ')';
+fator: INTEIRO | REAL | '(' expressao ')';
 
 condicao:
 	expressao ':-)' expressao // >
