@@ -1,4 +1,4 @@
-// Generated from /home/joaovperin/Projetos/Feevale/Compilers/NOTES_pt_BR/Aula_003-20190820/tst/HogwartsGrammar.g4 by ANTLR 4.7.1
+// Generated from /home/joaovperin/Projetos/Feevale/Compilers/HogwartsGrammar.g4 by ANTLR 4.7.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
